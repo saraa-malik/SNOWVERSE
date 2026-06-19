@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Snowverse — universe of ideas</title>
-  <!-- Font & Icons -->
+  <title>Snowverse — Home</title>
+  <meta name="description" content="Snowverse — A universe where ideas become reality. Premium digital products and educational resources.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
@@ -33,9 +33,10 @@
     </div>
   </nav>
 
-  <!-- ===== HERO (index) ===== -->
+  <!-- ===== HERO ===== -->
   <section class="hero" id="homeHero">
     <div class="hero-bg"></div>
+    <canvas id="particleCanvas"></canvas>
     <div class="hero-content">
       <h1 class="hero-title">SNOWVERSE</h1>
       <p class="hero-sub">A universe where ideas become reality.</p>
@@ -44,15 +45,38 @@
         <a href="shop.html" class="btn btn-secondary">Visit Shop</a>
       </div>
     </div>
-    <!-- animated particles (canvas) -->
-    <canvas id="particleCanvas"></canvas>
+  </section>
+
+  <!-- ===== EXPLORE SECTION (anchor) ===== -->
+  <section id="explore" style="padding: 80px 2rem; text-align: center; background: rgba(255,255,255,0.01);">
+    <div class="container">
+      <h2 class="section-title">Welcome to the Snowverse</h2>
+      <p class="section-sub" style="max-width: 700px; margin: 0 auto 2rem;">Creativity, innovation, and premium digital products — all crafted with purpose.</p>
+      <div style="display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap;">
+        <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(108,92,231,0.1); border-radius: 20px; padding: 2rem; flex: 1; min-width: 200px; max-width: 300px;">
+          <i class="fas fa-lightbulb" style="font-size: 2.5rem; color: #a29bfe;"></i>
+          <h3 style="margin: 1rem 0 0.5rem;">Innovation</h3>
+          <p style="color: #c8d6e5; font-size: 0.95rem;">Pushing boundaries with every project.</p>
+        </div>
+        <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(108,92,231,0.1); border-radius: 20px; padding: 2rem; flex: 1; min-width: 200px; max-width: 300px;">
+          <i class="fas fa-gem" style="font-size: 2.5rem; color: #00ceff;"></i>
+          <h3 style="margin: 1rem 0 0.5rem;">Quality</h3>
+          <p style="color: #c8d6e5; font-size: 0.95rem;">Premium resources you can trust.</p>
+        </div>
+        <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(108,92,231,0.1); border-radius: 20px; padding: 2rem; flex: 1; min-width: 200px; max-width: 300px;">
+          <i class="fas fa-rocket" style="font-size: 2.5rem; color: #a29bfe;"></i>
+          <h3 style="margin: 1rem 0 0.5rem;">Vision</h3>
+          <p style="color: #c8d6e5; font-size: 0.95rem;">Shaping the future of digital education.</p>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- ===== FOOTER ===== -->
   <footer class="footer">
     <div class="footer-container">
       <div class="footer-brand">
-        <span class="logo-snow">❄️</span> SNOWVERSE
+        <span class="logo-snow">❄️</span> <span>SNOWVERSE</span>
         <p class="footer-tagline">Building ideas, creating value, shaping the future.</p>
       </div>
       <div class="footer-socials">
