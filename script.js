@@ -14,20 +14,15 @@ if (navToggle && navMenu) {
   });
 }
 
-// ===== NAVBAR SCROLL =====
+// ===== NAVBAR SCROLL EFFECT =====
 const navbar = document.querySelector('.navbar');
-let lastScroll = 0;
 
 window.addEventListener('scroll', () => {
-  const currentScroll = window.pageYOffset;
-  
-  if (currentScroll > 50) {
+  if (window.scrollY > 50) {
     navbar.classList.add('scrolled');
   } else {
     navbar.classList.remove('scrolled');
   }
-  
-  lastScroll = currentScroll;
 });
 
 // ===== ENHANCED PARTICLES =====
@@ -36,7 +31,7 @@ if (canvas) {
   const ctx = canvas.getContext('2d');
   let width, height;
   let particles = [];
-  const particleCount = 180;
+  const particleCount = 120;
 
   function resizeCanvas() {
     width = canvas.parentElement.offsetWidth;
@@ -48,25 +43,24 @@ if (canvas) {
   function createParticles() {
     particles = [];
     const colors = [
-      '139, 92, 246',  // Purple
-      '13, 148, 136',   // Teal
-      '236, 72, 153',   // Pink
-      '251, 146, 60',   // Orange
-      '167, 139, 250',  // Light Purple
-      '45, 212, 191'    // Mint
+      '108, 92, 231',  // Purple
+      '0, 206, 255',   // Blue
+      '167, 139, 250', // Light Purple
+      '45, 212, 191',  // Mint
+      '236, 72, 153'   // Pink
     ];
     
     for (let i = 0; i < particleCount; i++) {
       particles.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        radius: Math.random() * 4 + 1,
-        speedX: (Math.random() - 0.5) * 0.6,
-        speedY: (Math.random() - 0.5) * 0.6,
-        opacity: Math.random() * 0.8 + 0.2,
+        radius: Math.random() * 3 + 0.8,
+        speedX: (Math.random() - 0.5) * 0.4,
+        speedY: (Math.random() - 0.5) * 0.4,
+        opacity: Math.random() * 0.6 + 0.2,
         color: colors[Math.floor(Math.random() * colors.length)],
         pulse: Math.random() * Math.PI * 2,
-        pulseSpeed: 0.02 + Math.random() * 0.03
+        pulseSpeed: 0.02 + Math.random() * 0.02
       });
     }
   }
@@ -75,11 +69,9 @@ if (canvas) {
     ctx.clearRect(0, 0, width, height);
 
     particles.forEach((p, i) => {
-      // Update pulse
       p.pulse += p.pulseSpeed;
       const pulseRadius = p.radius + Math.sin(p.pulse) * 0.5;
 
-      // Move
       p.x += p.speedX;
       p.y += p.speedY;
 
@@ -102,7 +94,7 @@ if (canvas) {
       // Core
       ctx.beginPath();
       ctx.arc(p.x, p.y, pulseRadius, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity * 0.9})`;
+      ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity * 0.8})`;
       ctx.fill();
 
       // Connections
@@ -111,19 +103,18 @@ if (canvas) {
         const dy = particles[j].y - p.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
 
-        if (distance < 180) {
-          const opacity = 0.1 * (1 - distance / 180);
+        if (distance < 150) {
+          const opacity = 0.08 * (1 - distance / 150);
           ctx.beginPath();
           ctx.moveTo(p.x, p.y);
           ctx.lineTo(particles[j].x, particles[j].y);
           
           const gradient2 = ctx.createLinearGradient(p.x, p.y, particles[j].x, particles[j].y);
           gradient2.addColorStop(0, `rgba(${p.color}, ${opacity})`);
-          gradient2.addColorStop(0.5, `rgba(139, 92, 246, ${opacity * 0.5})`);
           gradient2.addColorStop(1, `rgba(${particles[j].color}, ${opacity})`);
           
           ctx.strokeStyle = gradient2;
-          ctx.lineWidth = 1;
+          ctx.lineWidth = 0.6;
           ctx.stroke();
         }
       }
@@ -156,7 +147,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   });
 });
 
-// ===== ACTIVE NAV =====
+// ===== ACTIVE NAV LINK =====
 const currentPage = window.location.pathname.split('/').pop() || 'index.html';
 document.querySelectorAll('.nav-menu a').forEach(link => {
   const linkHref = link.getAttribute('href');
@@ -167,26 +158,4 @@ document.querySelectorAll('.nav-menu a').forEach(link => {
   }
 });
 
-// ===== INTERSECTION OBSERVER FOR ANIMATIONS =====
-const observerOptions = {
-  threshold: 0.1,
-  rootMargin: '0px 0px -50px 0px'
-};
-
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.style.opacity = '1';
-      entry.target.style.transform = 'translateY(0)';
-    }
-  });
-}, observerOptions);
-
-document.querySelectorAll('.service-card, .portfolio-card, .product-card, .stat-card').forEach(el => {
-  el.style.opacity = '0';
-  el.style.transform = 'translateY(30px)';
-  el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-  observer.observe(el);
-});
-
-console.log('❄️ Snowverse — Where ideas become reality ✨');
+console.log('❄️ Snowverse — Your Universe of Digital Solutions');
