@@ -1,161 +1,113 @@
-// ===== NAVIGATION TOGGLE =====
-const navToggle = document.getElementById('navToggle');
-const navMenu = document.getElementById('navMenu');
-
-if (navToggle && navMenu) {
-  navToggle.addEventListener('click', () => {
-    navMenu.classList.toggle('active');
-  });
-
-  document.querySelectorAll('.nav-menu a').forEach(link => {
-    link.addEventListener('click', () => {
-      navMenu.classList.remove('active');
-    });
-  });
-}
-
-// ===== NAVBAR SCROLL EFFECT =====
-const navbar = document.querySelector('.navbar');
-
-window.addEventListener('scroll', () => {
-  if (window.scrollY > 50) {
-    navbar.classList.add('scrolled');
-  } else {
-    navbar.classList.remove('scrolled');
-  }
-});
-
-// ===== ENHANCED PARTICLES =====
-const canvas = document.getElementById('particleCanvas');
-if (canvas) {
+// script.js
+(function() {
+  const canvas = document.getElementById('particles-canvas');
   const ctx = canvas.getContext('2d');
   let width, height;
   let particles = [];
-  const particleCount = 120;
+  const MAX_PARTICLES = 130;
+  const SNOW_COLOR = 'rgba(210, 235, 255, 0.5)';
 
-  function resizeCanvas() {
-    width = canvas.parentElement.offsetWidth;
-    height = canvas.parentElement.offsetHeight;
+  function resize() {
+    width = window.innerWidth;
+    height = window.innerHeight;
     canvas.width = width;
     canvas.height = height;
   }
+  window.addEventListener('resize', resize);
+  resize();
 
-  function createParticles() {
-    particles = [];
-    const colors = [
-      '108, 92, 231',  // Purple
-      '0, 206, 255',   // Blue
-      '167, 139, 250', // Light Purple
-      '45, 212, 191',  // Mint
-      '236, 72, 153'   // Pink
-    ];
-    
-    for (let i = 0; i < particleCount; i++) {
-      particles.push({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        radius: Math.random() * 3 + 0.8,
-        speedX: (Math.random() - 0.5) * 0.4,
-        speedY: (Math.random() - 0.5) * 0.4,
-        opacity: Math.random() * 0.6 + 0.2,
-        color: colors[Math.floor(Math.random() * colors.length)],
-        pulse: Math.random() * Math.PI * 2,
-        pulseSpeed: 0.02 + Math.random() * 0.02
-      });
+  class Particle {
+    constructor() {
+      this.x = Math.random() * width;
+      this.y = Math.random() * height - height * 0.2;
+      this.size = Math.random() * 2.8 + 0.8;
+      this.speedY = Math.random() * 0.8 + 0.25;
+      this.speedX = (Math.random() - 0.5) * 0.3;
+      this.opacity = Math.random() * 0.5 + 0.2;
+      this.wobble = Math.random() * 100;
+    }
+    update() {
+      this.y += this.speedY;
+      this.x += Math.sin(this.wobble + this.y * 0.003) * 0.2 + this.speedX * 0.1;
+      if (this.y > height + 20) {
+        this.y = -20;
+        this.x = Math.random() * width;
+      }
+      if (this.x > width + 20) this.x = -20;
+      if (this.x < -20) this.x = width + 20;
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = SNOW_COLOR;
+      ctx.shadowColor = 'rgba(160, 200, 255, 0.2)';
+      ctx.shadowBlur = 12;
+      ctx.fill();
+      ctx.shadowBlur = 0;
     }
   }
 
-  function drawParticles() {
-    ctx.clearRect(0, 0, width, height);
+  function initParticles() {
+    particles = [];
+    for (let i = 0; i < MAX_PARTICLES; i++) {
+      particles.push(new Particle());
+    }
+  }
+  initParticles();
 
-    particles.forEach((p, i) => {
-      p.pulse += p.pulseSpeed;
-      const pulseRadius = p.radius + Math.sin(p.pulse) * 0.5;
-
-      p.x += p.speedX;
-      p.y += p.speedY;
-
-      if (p.x < 0) p.x = width;
-      if (p.x > width) p.x = 0;
-      if (p.y < 0) p.y = height;
-      if (p.y > height) p.y = 0;
-
-      // Glow
-      const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, pulseRadius * 5);
-      gradient.addColorStop(0, `rgba(${p.color}, ${p.opacity})`);
-      gradient.addColorStop(0.5, `rgba(${p.color}, ${p.opacity * 0.3})`);
-      gradient.addColorStop(1, `rgba(${p.color}, 0)`);
-      
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, pulseRadius * 5, 0, Math.PI * 2);
-      ctx.fillStyle = gradient;
-      ctx.fill();
-
-      // Core
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, pulseRadius, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity * 0.8})`;
-      ctx.fill();
-
-      // Connections
-      for (let j = i + 1; j < particles.length; j++) {
-        const dx = particles[j].x - p.x;
-        const dy = particles[j].y - p.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-
-        if (distance < 150) {
-          const opacity = 0.08 * (1 - distance / 150);
-          ctx.beginPath();
-          ctx.moveTo(p.x, p.y);
-          ctx.lineTo(particles[j].x, particles[j].y);
-          
-          const gradient2 = ctx.createLinearGradient(p.x, p.y, particles[j].x, particles[j].y);
-          gradient2.addColorStop(0, `rgba(${p.color}, ${opacity})`);
-          gradient2.addColorStop(1, `rgba(${particles[j].color}, ${opacity})`);
-          
-          ctx.strokeStyle = gradient2;
-          ctx.lineWidth = 0.6;
-          ctx.stroke();
-        }
-      }
+  let stars = [];
+  for (let i = 0; i < 80; i++) {
+    stars.push({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      r: Math.random() * 1.2 + 0.3,
+      alpha: Math.random() * 0.5 + 0.1,
     });
-
-    requestAnimationFrame(drawParticles);
   }
 
-  resizeCanvas();
-  createParticles();
-  drawParticles();
+  function drawStars() {
+    for (let s of stars) {
+      s.alpha += (Math.random() - 0.5) * 0.03;
+      s.alpha = Math.min(0.7, Math.max(0.1, s.alpha));
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(210, 235, 255, ${s.alpha * 0.5})`;
+      ctx.shadowColor = 'rgba(180, 215, 255, 0.1)';
+      ctx.shadowBlur = 6;
+      ctx.fill();
+    }
+    ctx.shadowBlur = 0;
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+    const grad = ctx.createRadialGradient(width*0.5, height*0.3, 100, width*0.5, height*0.5, width*0.9);
+    grad.addColorStop(0, '#141d2b');
+    grad.addColorStop(0.7, '#0a0e16');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, width, height);
+
+    for (let p of particles) {
+      p.update();
+      p.draw();
+    }
+    drawStars();
+    ctx.shadowBlur = 0;
+    requestAnimationFrame(animate);
+  }
+  animate();
 
   window.addEventListener('resize', () => {
-    resizeCanvas();
-    createParticles();
-  });
-}
-
-// ===== SMOOTH SCROLL =====
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener('click', function(e) {
-    const targetId = this.getAttribute('href');
-    if (targetId === '#') return;
-    const target = document.querySelector(targetId);
-    if (target) {
-      e.preventDefault();
-      const offsetTop = target.getBoundingClientRect().top + window.pageYOffset - 80;
-      window.scrollTo({ top: offsetTop, behavior: 'smooth' });
+    resize();
+    initParticles();
+    stars = [];
+    for (let i = 0; i < 80; i++) {
+      stars.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        r: Math.random() * 1.2 + 0.3,
+        alpha: Math.random() * 0.5 + 0.1,
+      });
     }
   });
-});
-
-// ===== ACTIVE NAV LINK =====
-const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-document.querySelectorAll('.nav-menu a').forEach(link => {
-  const linkHref = link.getAttribute('href');
-  if (linkHref === currentPage) {
-    link.classList.add('active');
-  } else {
-    link.classList.remove('active');
-  }
-});
-
-console.log('❄️ Snowverse — Your Universe of Digital Solutions');
+})();
