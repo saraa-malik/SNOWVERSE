@@ -1,359 +1,14 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SNOWVERSE · digital universe</title>
-  <!-- Font & base -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      background: #0b0d12;
-      font-family: 'Inter', sans-serif;
-      color: #f0f4ff;
-      line-height: 1.5;
-      overflow-x: hidden;
-    }
-
-    /* canvas background (snow / stars) */
-    #particles-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    .container {
-      position: relative;
-      z-index: 2;
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 0 2rem;
-    }
-
-    /* ---------- GLOW / NEON ---------- */
-    .glow-text {
-      text-shadow: 0 0 8px rgba(140, 200, 255, 0.3), 0 0 20px rgba(100, 180, 255, 0.15);
-    }
-    .glow-border {
-      box-shadow: 0 0 12px rgba(120, 200, 255, 0.2), 0 0 30px rgba(80, 160, 255, 0.05);
-    }
-
-    /* ---------- HEADER / NAV ---------- */
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1.8rem 0 1rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-      backdrop-filter: blur(2px);
-    }
-    .logo {
-      font-size: 1.6rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      background: linear-gradient(135deg, #b0e0ff, #a78bfa);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      text-shadow: 0 0 30px rgba(150, 180, 255, 0.2);
-    }
-    .nav-links {
-      display: flex;
-      gap: 2.8rem;
-      font-weight: 400;
-      color: #b6c8e0;
-      letter-spacing: 0.01em;
-      font-size: 0.95rem;
-    }
-    .nav-links span {
-      cursor: default;
-      transition: 0.2s;
-      border-bottom: 1px solid transparent;
-    }
-    .nav-links span:hover {
-      color: #e6f0ff;
-      text-shadow: 0 0 12px rgba(160, 200, 255, 0.4);
-      border-bottom: 1px solid rgba(160, 200, 255, 0.25);
-    }
-
-    /* ---------- HERO ---------- */
-    .hero {
-      padding: 7rem 0 6rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      animation: fadeUp 1.2s ease-out forwards;
-      opacity: 0;
-    }
-    @keyframes fadeUp {
-      0% { opacity: 0; transform: translateY(30px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
-
-    .hero h1 {
-      font-size: clamp(4.2rem, 18vw, 7.2rem);
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      background: linear-gradient(135deg, #ffffff 0%, #b3d9ff 45%, #c5b4ff 80%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 0.6rem;
-      text-shadow: 0 0 60px rgba(80, 160, 255, 0.15);
-      line-height: 1.1;
-    }
-
-    .hero .tagline {
-      font-size: 1.5rem;
-      font-weight: 300;
-      letter-spacing: 0.3em;
-      color: #c8daff;
-      text-shadow: 0 0 30px rgba(100, 180, 255, 0.15);
-      margin-bottom: 2.5rem;
-      background: rgba(255, 255, 255, 0.02);
-      padding: 0.5rem 2rem;
-      border-radius: 60px;
-      backdrop-filter: blur(2px);
-      border: 1px solid rgba(255, 255, 255, 0.03);
-    }
-
-    .hero .cta-btn {
-      background: transparent;
-      border: 1.5px solid rgba(180, 215, 255, 0.5);
-      padding: 1rem 3.5rem;
-      border-radius: 80px;
-      font-size: 1.3rem;
-      font-weight: 600;
-      color: #edf6ff;
-      letter-spacing: 0.08em;
-      backdrop-filter: blur(4px);
-      background: rgba(20, 40, 70, 0.2);
-      transition: all 0.3s ease;
-      cursor: pointer;
-      box-shadow: 0 0 20px rgba(80, 180, 255, 0.05);
-      text-transform: uppercase;
-      font-family: 'Inter', sans-serif;
-      margin-top: 1rem;
-    }
-    .hero .cta-btn:hover {
-      background: rgba(140, 200, 255, 0.08);
-      border-color: #a0d0ff;
-      box-shadow: 0 0 40px rgba(100, 190, 255, 0.3), 0 0 80px rgba(80, 150, 255, 0.1);
-      transform: scale(1.02);
-      color: #ffffff;
-      text-shadow: 0 0 20px rgba(160, 210, 255, 0.5);
-    }
-
-    /* ---------- ABOUT ---------- */
-    .about {
-      padding: 5rem 0 4rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.02);
-      animation: fadeUp 1s ease-out forwards;
-      opacity: 0;
-      animation-delay: 0.15s;
-    }
-    .about h2 {
-      font-size: 2.2rem;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      margin-bottom: 1.5rem;
-      background: linear-gradient(135deg, #eef6ff, #b7c9ff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      display: inline-block;
-    }
-    .about p {
-      max-width: 700px;
-      font-size: 1.2rem;
-      font-weight: 300;
-      color: #b8cbeb;
-      line-height: 1.8;
-      letter-spacing: 0.01em;
-      border-left: 3px solid rgba(160, 200, 255, 0.2);
-      padding-left: 2rem;
-      text-shadow: 0 0 20px rgba(80, 140, 255, 0.05);
-    }
-
-    /* ---------- FEATURES ---------- */
-    .features {
-      padding: 5rem 0 5rem;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 2.5rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.02);
-      animation: fadeUp 1s ease-out forwards;
-      opacity: 0;
-      animation-delay: 0.3s;
-    }
-
-    .feature-card {
-      background: rgba(16, 26, 42, 0.45);
-      backdrop-filter: blur(6px);
-      padding: 2.5rem 1.8rem;
-      border-radius: 32px;
-      border: 1px solid rgba(180, 215, 255, 0.08);
-      transition: all 0.25s ease;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-    .feature-card::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle at 30% 30%, rgba(120, 200, 255, 0.02), transparent 70%);
-      opacity: 0;
-      transition: 0.6s;
-    }
-    .feature-card:hover::before {
-      opacity: 1;
-    }
-    .feature-card:hover {
-      border-color: rgba(160, 200, 255, 0.25);
-      transform: translateY(-8px);
-      box-shadow: 0 20px 50px rgba(60, 140, 255, 0.12), 0 0 30px rgba(120, 190, 255, 0.05);
-    }
-
-    .feature-card .icon {
-      font-size: 2.8rem;
-      margin-bottom: 1.2rem;
-      display: block;
-      filter: drop-shadow(0 0 12px rgba(140, 200, 255, 0.2));
-    }
-    .feature-card h3 {
-      font-size: 1.4rem;
-      font-weight: 600;
-      margin-bottom: 0.8rem;
-      letter-spacing: -0.01em;
-      color: #e6f0ff;
-    }
-    .feature-card p {
-      color: #a5bddb;
-      font-weight: 300;
-      font-size: 0.98rem;
-      line-height: 1.6;
-      opacity: 0.9;
-    }
-
-    /* ---------- CTA SECTION ---------- */
-    .cta-section {
-      padding: 5rem 0 6rem;
-      text-align: center;
-      border-top: 1px solid rgba(255, 255, 255, 0.02);
-      animation: fadeUp 1s ease-out forwards;
-      opacity: 0;
-      animation-delay: 0.45s;
-    }
-    .cta-section h2 {
-      font-size: 2.6rem;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      margin-bottom: 1.2rem;
-      background: linear-gradient(135deg, #f0f8ff, #b7c9ff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .cta-section .cta-large {
-      background: transparent;
-      border: 1.5px solid rgba(180, 215, 255, 0.4);
-      padding: 1.2rem 4.2rem;
-      border-radius: 100px;
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: #edf6ff;
-      letter-spacing: 0.12em;
-      backdrop-filter: blur(6px);
-      background: rgba(12, 28, 50, 0.3);
-      transition: all 0.35s ease;
-      cursor: pointer;
-      box-shadow: 0 0 30px rgba(80, 180, 255, 0.05);
-      text-transform: uppercase;
-      font-family: 'Inter', sans-serif;
-      margin-top: 0.5rem;
-    }
-    .cta-section .cta-large:hover {
-      background: rgba(140, 200, 255, 0.07);
-      border-color: #9acbff;
-      box-shadow: 0 0 60px rgba(100, 190, 255, 0.25), 0 0 120px rgba(80, 150, 255, 0.08);
-      transform: scale(1.02);
-      color: #ffffff;
-      text-shadow: 0 0 30px rgba(160, 210, 255, 0.4);
-    }
-
-    /* ---------- FOOTER ---------- */
-    .footer {
-      padding: 2.5rem 0 1.8rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.02);
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      color: #7e92b0;
-      font-weight: 300;
-      font-size: 0.9rem;
-      letter-spacing: 0.02em;
-    }
-    .footer span {
-      opacity: 0.6;
-    }
-
-    /* ---------- RESPONSIVE ---------- */
-    @media (max-width: 700px) {
-      .container { padding: 0 1.2rem; }
-      .navbar { flex-direction: column; gap: 0.5rem; padding: 1.2rem 0; }
-      .nav-links { gap: 1.8rem; font-size: 0.9rem; flex-wrap: wrap; justify-content: center; }
-      .hero { padding: 4rem 0 3rem; }
-      .hero .tagline { font-size: 1rem; letter-spacing: 0.15em; padding: 0.4rem 1.2rem; }
-      .hero .cta-btn { padding: 0.8rem 2.2rem; font-size: 1.0rem; }
-      .about p { font-size: 1rem; padding-left: 1rem; }
-      .features { grid-template-columns: 1fr; gap: 1.8rem; }
-      .cta-section h2 { font-size: 2rem; }
-      .cta-section .cta-large { padding: 1rem 2rem; font-size: 1.2rem; }
-      .footer { flex-direction: column; align-items: center; gap: 0.8rem; text-align: center; }
-    }
-
-    @media (max-width: 480px) {
-      .hero h1 { font-size: 3.4rem; }
-      .hero .tagline { font-size: 0.85rem; letter-spacing: 0.1em; }
-      .feature-card { padding: 1.8rem 1rem; }
-    }
-
-    /* floating glow accent */
-    .glow-orb {
-      position: absolute;
-      width: 300px;
-      height: 300px;
-      background: radial-gradient(circle, rgba(100, 180, 255, 0.04), transparent 70%);
-      border-radius: 50%;
-      top: -100px;
-      right: -80px;
-      z-index: 0;
-      pointer-events: none;
-      filter: blur(40px);
-    }
-    .relative-wrap {
-      position: relative;
-      overflow: hidden;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -368,22 +23,23 @@
     <nav class="navbar">
       <div class="logo">❄️ SNOWVERSE</div>
       <div class="nav-links">
-        <span>Universe</span>
-        <span>Ideas</span>
-        <span>Studio</span>
-        <span>Contact</span>
+        <a href="#about">Universe</a>
+        <a href="#features">Ideas</a>
+        <a href="#contact">Studio</a>
+        <a href="#contact">Contact</a>
       </div>
     </nav>
 
     <!-- HERO -->
-    <section class="hero">
+    <section class="hero" id="home">
       <h1>SNOWVERSE</h1>
       <div class="tagline">“A universe where ideas become reality”</div>
-      <button class="cta-btn" onclick="alert('✨ Welcome to Snowverse.')">Explore</button>
+      <a href="#cta" class="cta-btn">Explore</a>
+      <div class="scroll-hint">↓ scroll to discover</div>
     </section>
 
     <!-- ABOUT -->
-    <section class="about">
+    <section class="about" id="about">
       <h2>✦ about the verse</h2>
       <p>
         Snowverse is a creative digital brand built for the next generation. 
@@ -394,7 +50,7 @@
     </section>
 
     <!-- FEATURES -->
-    <div class="features">
+    <div class="features" id="features">
       <div class="feature-card">
         <span class="icon">✦</span>
         <h3>Creativity Hub</h3>
@@ -413,142 +69,38 @@
     </div>
 
     <!-- CTA -->
-    <section class="cta-section">
+    <section class="cta-section" id="cta">
       <h2>ready to enter?</h2>
-      <button class="cta-large" onclick="alert('❄️ Welcome to Snowverse — the future is now.')">Enter Snowverse</button>
+      <a href="#" class="cta-large" onclick="alert('❄️ Welcome to Snowverse — the future is now.'); return false;">Enter Snowverse</a>
+    </section>
+
+    <!-- CONTACT / SOCIAL -->
+    <section class="contact-section" id="contact">
+      <h2>✦ connect with us</h2>
+      <p>Follow the vision — join the Snowverse community.</p>
+      <div class="social-links">
+        <a href="https://instagram.com/saramalikceo" target="_blank" rel="noopener noreferrer">
+          <span class="social-icon">📸</span> Instagram
+        </a>
+        <a href="https://discord.gg/saramalikceo" target="_blank" rel="noopener noreferrer">
+          <span class="social-icon">💬</span> Discord
+        </a>
+        <a href="mailto:hello@snowverse.xyz" style="border-color: rgba(180,215,255,0.12);">
+          <span class="social-icon">✉️</span> Email
+        </a>
+      </div>
+      <p style="margin-top: 2rem; font-size: 0.9rem; color: #6a7f9a;">
+        <span style="opacity:0.7;">✦</span> saramalikceo <span style="opacity:0.7;">✦</span>
+      </p>
     </section>
 
     <!-- FOOTER -->
     <footer class="footer">
       <span>© 2026 SNOWVERSE · digital universe</span>
-      <span>✦ crafted with ice & code</span>
+      <span>✦ crafted with ice & code · <a href="#home">↥ back to top</a></span>
     </footer>
   </div>
 
-  <script>
-    (function() {
-      const canvas = document.getElementById('particles-canvas');
-      const ctx = canvas.getContext('2d');
-      let width, height;
-      let particles = [];
-      const MAX_PARTICLES = 120;
-      const SNOW_COLOR = 'rgba(210, 235, 255, 0.5)';
-
-      function resize() {
-        width = window.innerWidth;
-        height = window.innerHeight;
-        canvas.width = width;
-        canvas.height = height;
-      }
-      window.addEventListener('resize', resize);
-      resize();
-
-      class Particle {
-        constructor() {
-          this.x = Math.random() * width;
-          this.y = Math.random() * height - height * 0.2; // start above view
-          this.size = Math.random() * 2.8 + 0.8;
-          this.speedY = Math.random() * 0.8 + 0.25;
-          this.speedX = (Math.random() - 0.5) * 0.3;
-          this.opacity = Math.random() * 0.5 + 0.2;
-          this.wobble = Math.random() * 100;
-        }
-        update() {
-          this.y += this.speedY;
-          this.x += Math.sin(this.wobble + this.y * 0.003) * 0.2 + this.speedX * 0.1;
-          // wrap around
-          if (this.y > height + 20) {
-            this.y = -20;
-            this.x = Math.random() * width;
-          }
-          if (this.x > width + 20) this.x = -20;
-          if (this.x < -20) this.x = width + 20;
-        }
-        draw() {
-          ctx.beginPath();
-          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-          ctx.fillStyle = SNOW_COLOR;
-          ctx.shadowColor = 'rgba(160, 200, 255, 0.2)';
-          ctx.shadowBlur = 12;
-          ctx.fill();
-          // tiny glow
-          ctx.shadowBlur = 0;
-        }
-      }
-
-      function initParticles() {
-        particles = [];
-        for (let i = 0; i < MAX_PARTICLES; i++) {
-          particles.push(new Particle());
-        }
-      }
-      initParticles();
-
-      // extra stars (tiny twinkling)
-      let stars = [];
-      for (let i = 0; i < 70; i++) {
-        stars.push({
-          x: Math.random() * width,
-          y: Math.random() * height,
-          r: Math.random() * 1.2 + 0.3,
-          alpha: Math.random() * 0.5 + 0.1,
-          twinkleSpeed: Math.random() * 0.015 + 0.005,
-        });
-      }
-
-      function drawStars() {
-        for (let s of stars) {
-          s.alpha += (Math.random() - 0.5) * 0.03;
-          s.alpha = Math.min(0.7, Math.max(0.1, s.alpha));
-          ctx.beginPath();
-          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(210, 235, 255, ${s.alpha * 0.5})`;
-          ctx.shadowColor = 'rgba(180, 215, 255, 0.1)';
-          ctx.shadowBlur = 6;
-          ctx.fill();
-        }
-        ctx.shadowBlur = 0;
-      }
-
-      function animate() {
-        ctx.clearRect(0, 0, width, height);
-        // draw background gradient (soft dark)
-        const grad = ctx.createRadialGradient(width*0.5, height*0.3, 100, width*0.5, height*0.5, width*0.9);
-        grad.addColorStop(0, '#141d2b');
-        grad.addColorStop(0.7, '#0a0e16');
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, width, height);
-
-        // particles
-        for (let p of particles) {
-          p.update();
-          p.draw();
-        }
-        // stars
-        drawStars();
-
-        // subtle floating "snow glow" extra
-        ctx.shadowBlur = 0;
-        requestAnimationFrame(animate);
-      }
-      animate();
-
-      // reinit on resize
-      window.addEventListener('resize', () => {
-        resize();
-        initParticles();
-        stars = [];
-        for (let i = 0; i < 70; i++) {
-          stars.push({
-            x: Math.random() * width,
-            y: Math.random() * height,
-            r: Math.random() * 1.2 + 0.3,
-            alpha: Math.random() * 0.5 + 0.1,
-            twinkleSpeed: Math.random() * 0.015 + 0.005,
-          });
-        }
-      });
-    })();
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
